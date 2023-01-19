@@ -1,8 +1,8 @@
 /**
  * Write a description of class Deck here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @SCOOT
+ * @1/18
  */
 
 import greenfoot.*;
