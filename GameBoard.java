@@ -3,8 +3,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Game Board for Triples
  * 
- * @Scoot
- * @1/12
+ * @SCOOT
+ * @
  */
 public class GameBoard extends World
 {
@@ -13,8 +13,7 @@ public class GameBoard extends World
     public GameBoard()
     {   
         super(430, 600, 1, false); 
-        new Tester();
+        Dealer dealer = new Dealer(NUM_CARDS_IN_DECK);
+        addObject(dealer,-30, -30);
     }
-
-
 }
