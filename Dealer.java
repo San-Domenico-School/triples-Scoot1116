@@ -8,31 +8,30 @@ import greenfoot.*;
  */
 
 import java.util.ArrayList;
-
 public class Dealer extends Actor
 {
-    /**
-     * Act - do whatever the Dealer wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    private int triplesRemaining;
     private Deck deck;
-    
+    private int triplesRemaining;
     
     public void addedToWorld(World world)
     {
         dealBoard();
     }
     
-    public void dealBoard()
+    public Dealer(int numCardsInDeck)
     {
-        for(int row = 0; row < 5; row++)
+        deck = new Deck(numCardsInDeck);
+        triplesRemaining = numCardsInDeck / 3;
+        Scorekeeper.setDeckSize(numCardsInDeck);
+    }
+    
+    protected void dealBoard()
+    {
+        for (int row = 0; row < 5; row++)
         {
             for(int col = 0; col < 3; col++)
             {
-                getWorld().addObject(deck.getTopCard(),
-                        85 + 130 * col,80 + 80 * row);
-                
+                getWorld().addObject(deck.getTopCard(), col * 130 + 83, row * 83 + 60);
             }
         }
     }
@@ -42,10 +41,10 @@ public class Dealer extends Actor
         String cardsRemainingText = new Integer(triplesRemaining * 3).toString();
         String scoreText = new Integer(Scorekeeper.getScore()).toString();
         getWorld().showText(cardsRemainingText, 310, 470);
-        getWorld().showText(scoreText, 310, 504);   
+        getWorld().showText(scoreText, 310, 504);  
     }
     
-    public void checkIfEndGame()
+    protected void checkIfEndGame()
     {
         if (triplesRemaining == 0)
         {
@@ -53,20 +52,12 @@ public class Dealer extends Actor
         }
     }
     
-    public void checkIfTriple(ArrayList<Card> cardsOnBoard, Card[] cardsSelected, ArrayList<Integer> selectedCardsIndex)
+    protected void checkIfTriple(ArrayList<Card> cardsOnBoard, Card[] cardsSelected, ArrayList<Integer>selectedCardsIndex)
     {
-        int shapes = cardsSelected[0].getShape().ordinal() + 
-                   cardsSelected[1].getShape().ordinal() +
-                   cardsSelected[2].getShape().ordinal();
-        int colors = cardsSelected[0].getColor().ordinal() + 
-                   cardsSelected[1].getColor().ordinal() +
-                   cardsSelected[2].getColor().ordinal();
-        int numOfShapes = cardsSelected[0].getNumberOfShapes() + 
-                   cardsSelected[1].getNumberOfShapes() +
-                   cardsSelected[2].getNumberOfShapes();
-        int shading = cardsSelected[0].getShading() + 
-                   cardsSelected[1].getShading() +
-                   cardsSelected[2].getShading();
+        int shapes = cardsSelected[0].getShape().ordinal() + cardsSelected[1].getShape().ordinal() + cardsSelected[2].getShape().ordinal();
+        int colors = cardsSelected[0].getColor().ordinal() + cardsSelected[1].getColor().ordinal() + cardsSelected[2].getColor().ordinal();
+        int numOfShapes = cardsSelected[0].getNumberOfShapes() + cardsSelected[1].getNumberOfShapes() + cardsSelected[2].getNumberOfShapes();
+        int shading = cardsSelected[0].getShading() + cardsSelected[1].getShading() + cardsSelected[2].getShading();
         
         if(shapes % 3 == 0 && colors % 3 == 0 && numOfShapes % 3 == 0 && shading % 3 == 0 )
         {
@@ -74,8 +65,13 @@ public class Dealer extends Actor
         }
         else
         {
-        
+           Animations.wobble(cardsSelected);
         }
+    }
+    
+    private void removeAndReplaceTriple(Card cardsOnBoard, Card cardsSelected, int selectedCardIndex)
+    {
+        
     }
     
     private void removeAndReplaceTriple(ArrayList<Card> cardsOnBoard, Card[] cardsSelected, ArrayList<Integer> selectedCardsIndex)
@@ -91,7 +87,7 @@ public class Dealer extends Actor
        Animations.slideAndTurn(cardsSelected);      
 
        // Remove and replace triple cards
-        for(int card = 0; card < 3; card++)
+       for(int card = 0; card < 3; card++)
        { 
            getWorld().removeObject(cardsSelected[card]);
            if(deck.getNumCardsInDeck() > 0)
@@ -102,18 +98,11 @@ public class Dealer extends Actor
                                                      cardsXYCoordinate[card][1]);
            }
        }
-       
        // UI Housekeeping
        triplesRemaining--;
        Scorekeeper.updateScore();
-       setUI(); 
-       checkIfEndGame();
-    }
-    
-    public Dealer(int numCardsInDeck)
-    {
-        deck = new Deck(numCardsInDeck);
-        triplesRemaining = numCardsInDeck / 3;
-        Scorekeeper.setDeckSize(numCardsInDeck);
+       setUI();
+       checkIfEndGame(); 
+
     }
 }
