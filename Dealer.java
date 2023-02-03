@@ -25,7 +25,7 @@ public class Dealer extends Actor
         Scorekeeper.setDeckSize(numCardsInDeck);
     }
     
-    protected void dealBoard()
+    public void dealBoard()
     {
         for (int row = 0; row < 5; row++)
         {
@@ -44,7 +44,7 @@ public class Dealer extends Actor
         getWorld().showText(scoreText, 310, 504);  
     }
     
-    protected void checkIfEndGame()
+    public void checkIfEndGame()
     {
         if (triplesRemaining == 0)
         {
@@ -52,7 +52,7 @@ public class Dealer extends Actor
         }
     }
     
-    protected void checkIfTriple(ArrayList<Card> cardsOnBoard, Card[] cardsSelected, ArrayList<Integer>selectedCardsIndex)
+    public void checkIfTriple(ArrayList<Card> cardsOnBoard, Card[] cardsSelected, ArrayList<Integer>selectedCardsIndex)
     {
         int shapes = cardsSelected[0].getShape().ordinal() + cardsSelected[1].getShape().ordinal() + cardsSelected[2].getShape().ordinal();
         int colors = cardsSelected[0].getColor().ordinal() + cardsSelected[1].getColor().ordinal() + cardsSelected[2].getColor().ordinal();
