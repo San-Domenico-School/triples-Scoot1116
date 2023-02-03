@@ -14,19 +14,30 @@ public class Player extends Actor
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
+    
     private Dealer dealer;
     private Card[] cardsSelected;
     private ArrayList<Card> cardsOnBoard;
     private ArrayList<Integer> selectedCardsIndex;
  
-    
+    public Player(Dealer dealer)
+    {
+        this.dealer = dealer;
+        cardsSelected = new Card[3];
+        cardsOnBoard = new ArrayList<Card>();
+        selectedCardsIndex = new ArrayList<Integer>();
+    }
+
     public void act()
     {
         selectCards();
-        dealer.checkIfTriple(cardsOnBoard, cardsSelected, selectedCardsIndex);
-        resetCardsSelected();
+        if(threeCardsSelected())
+        {
+            dealer.checkIfTriple(cardsOnBoard, cardsSelected, selectedCardsIndex);
+            resetCardsSelected();
+        }
     }
-    
+
        public void addedToWorld(World world)
     {
         cardsOnBoard = (ArrayList) getWorld().getObjects(Card.class);
@@ -54,7 +65,7 @@ public class Player extends Actor
             }
     }
     
-    private void resetCardsSelected()
+    public void resetCardsSelected()
     {
          for(int i = 0; i < cardsOnBoard.size(); i++)
           {
@@ -64,9 +75,19 @@ public class Player extends Actor
           selectedCardsIndex.clear();
     }
     
+
     private boolean threeCardsSelected()
     {
-        return false;
+         if(selectedCardsIndex.size() == 3)
+         {
+            cardsSelected[0] = cardsOnBoard.get(selectedCardsIndex.get(0));
+            cardsSelected[1] = cardsOnBoard.get(selectedCardsIndex.get(1)); 
+            cardsSelected[2] = cardsOnBoard.get(selectedCardsIndex.get(2));
+            return true;
+         }
+         else
+         {
+              return false;
+         }
     }
-    
 }
